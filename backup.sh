@@ -3,7 +3,7 @@
 # Simple backup script to backup content of 
 # /var/www/ folder to remote server
 #
-# TODO: Add date to archive name
+# TODO: Add date to archive name done
 # TODO: Add logging
 # TODO: Add encryption
 # TODO: Add sending archive to remote
@@ -12,11 +12,17 @@
 
 
 source='/var/www/html'
-archive='var-www.bak.tar'
+today=`date +%d-%m-%y`
+archive=$today'var-www.bak.tar'
+
+echo `date` 'script started' >> log.txt
+
 
 if [ $(id -u) -eq 0 ]; then
 
   # create tar archive and compress it if successful
+
+  echo `date` 'Creating Archive and comrpressing it' >> log.txt
   tar --create --verbose --file $archive $source && \
   xz --compress --verbose $archive
 
@@ -25,6 +31,9 @@ if [ $(id -u) -eq 0 ]; then
 
     exit 1 
   fi
+
+  echo `date` 'Script ended' >> log.txt
+  echo ' ' >> log.txt
 
 else
 
