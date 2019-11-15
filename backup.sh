@@ -5,7 +5,7 @@ archive='var-www.bak.tar'
 
 if [ $(id -u) -eq 0 ]; then
 
-  tar -cvf $archive $source
+  tar --create --verbose --file $archive $source
 
 else
 
