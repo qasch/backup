@@ -5,7 +5,7 @@
 #
 # TODO: Add date to archive name done
 # TODO: Add logging
-# TODO: Add encryption
+# TODO: Add encryption --
 # TODO: Add sending archive to remote
 # TODO: Delete local archive afterwards
 # TODO: Make script executed every hour
@@ -24,7 +24,9 @@ if [ $(id -u) -eq 0 ]; then
 
   echo `date` 'Creating Archive and comrpressing it' >> log.txt
   tar --create --verbose --file $archive $source && \
-  xz --compress --verbose $archive
+  xz --compress --verbose $archive && \
+  gpg --symmetric --batch --passphrase 1234 $archive.xz && \
+  rm $archive.xz 
 
   if [ $? -ne 0 ]; then
     echo "Something went wrong creating compressed archive. Exiting."
