@@ -5,7 +5,7 @@
 #
 # TODO: Add date to archive name
 # TODO: Add logging
-# TODO: Add encryption
+# TODO: Add encryption --
 # TODO: Add sending archive to remote
 # TODO: Delete local archive afterwards
 # TODO: Make script executed every hour
@@ -17,8 +17,10 @@ archive='var-www.bak.tar'
 if [ $(id -u) -eq 0 ]; then
 
   # create tar archive and compress it if successful
-  tar --create --verbose --file $archive $source && \
-  xz --compress --verbose $archive
+  tar --create --verbose --file $archive $source &>>backuplog.txt && \
+  xz --compress --verbose $archive &>>backuplog.txt && \
+  gpg --symmetric --batch --passphrase 1234 $archive.xz &>>backuplog.txt && \
+  rm $archive.xz &>>backuplog.txt
 
   if [ $? -ne 0 ]; then
     echo "Something went wrong creating compressed archive. Exiting."
